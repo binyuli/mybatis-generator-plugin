@@ -4,7 +4,6 @@ import org.mybatis.generator.api.IntrospectedTable;
 import org.mybatis.generator.api.PluginAdapter;
 import org.mybatis.generator.api.dom.java.FullyQualifiedJavaType;
 import org.mybatis.generator.api.dom.java.Interface;
-import org.mybatis.generator.api.dom.java.Method;
 import org.mybatis.generator.api.dom.java.TopLevelClass;
 
 import java.util.List;
@@ -27,21 +26,25 @@ public class BaseMapperGeneratorPlugin extends PluginAdapter {
         + introspectedTable.getExampleType() + ","
         + "java.lang.String" + ">");
 
-    FullyQualifiedJavaType imp = new FullyQualifiedJavaType(
-        "bz.sunlight.BaseMapper");
-
     // 添加 extends MybatisBaseMapper
     interfaze.addSuperInterface(fqjt);
 
-    // 添加import bz.sunlight.BaseMapper.
+    // 添加 bz.sunlight.BaseMapper.
+    FullyQualifiedJavaType imp = new FullyQualifiedJavaType(
+        "bz.sunlight.BaseMapper");
     interfaze.addImportedType(imp);
 
-    List<Method> methods = interfaze.getMethods();
-    for (Method m : methods) {
-      System.out.println(m.getName());
-    }
+    /*
+    // 移除不必要依赖 failed
+    FullyQualifiedJavaType impList = new FullyQualifiedJavaType(
+        "java.util.List");
+    FullyQualifiedJavaType impParam = new FullyQualifiedJavaType(
+        "org.apache.ibatis.annotations.Param");
+    interfaze.getImportedTypes().remove(impList);
+    interfaze.getImportedTypes().remove(impParam);
+    */
 
-    // 方法不需要
+    // 去方法和注释
     interfaze.getMethods().clear();
     interfaze.getAnnotations().clear();
     return true;
