@@ -6,7 +6,9 @@ import org.mybatis.generator.api.dom.java.FullyQualifiedJavaType;
 import org.mybatis.generator.api.dom.java.Interface;
 import org.mybatis.generator.api.dom.java.TopLevelClass;
 
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 public class BaseMapperGeneratorPlugin extends PluginAdapter {
 
@@ -36,12 +38,26 @@ public class BaseMapperGeneratorPlugin extends PluginAdapter {
 
     /*
     // 移除不必要依赖 failed
-    FullyQualifiedJavaType impList = new FullyQualifiedJavaType(
-        "java.util.List");
-    FullyQualifiedJavaType impParam = new FullyQualifiedJavaType(
-        "org.apache.ibatis.annotations.Param");
-    interfaze.getImportedTypes().remove(impList);
-    interfaze.getImportedTypes().remove(impParam);
+    try {
+      // 迭代器移除
+      for (Iterator<FullyQualifiedJavaType> it = interfaze.getImportedTypes().iterator(); it.hasNext(); ) {
+        FullyQualifiedJavaType importedType = it.next();
+        if (importedType.getFullyQualifiedName().equals("java.util.List") ||
+            importedType.getFullyQualifiedName().equals("org.apache.ibatis.annotations.Param")) {
+          it.remove();
+        }
+      }
+      // 加强 for 循环移除
+      Set<FullyQualifiedJavaType> imps = interfaze.getImportedTypes();
+      for (FullyQualifiedJavaType importedType : imps) {
+        if (importedType.getFullyQualifiedName().equals("java.util.List") ||
+            importedType.getFullyQualifiedName().equals("org.apache.ibatis.annotations.Param")) {
+          imps.remove(importedType);
+        }
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
     */
 
     // 去方法和注释
